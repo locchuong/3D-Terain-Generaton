@@ -4,19 +4,40 @@ var scl = 10;
 var w = 1000;
 var h = 700;
 var terrain;
-var offIncr = 0.05; //Intensity
+let slider;
+//var offIncr; //Intensity
+var offIncr;
 var move = 0;
 
 function setup() {
-  createCanvas(600, 600, WEBGL);
+  let cnv = createCanvas(600, 600, WEBGL);
   cols = w / scl;
   rows = h / scl;
   terrain = gen2DArr(cols, rows);
+  cnv.style('border', '6px solid black');
+  cnv.style('border-radius', '25px');
+
+  // Slider
+  slider = createSlider(0, 10, 5).size(this.width >> 1, AUTO);
+  windowResized();
+}
+
+function windowResized() {
+  this._renderer.position(50 >> 1,
+    this.height >> 1);
+  const sliderX = (this.width - slider.width >> 1) + this._renderer.x,
+    sliderY = (slider.height >> 1) + this._renderer.y;
+
+  slider.position(sliderX, sliderY);
 }
 
 function draw() {
-  fillArr();
   background(135, 180, 210);
+  fill(0);
+  offIncr = slider.value() * 0.01;
+
+  
+  fillArr();
   stroke(0, 50, 0);
   rotateX(PI / 3);
   translate(-w / 2, -h / 2);
@@ -33,6 +54,7 @@ function draw() {
     }
     endShape();
   }
+  
 }
 
 function fillArr() {
